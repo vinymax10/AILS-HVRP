@@ -6,7 +6,7 @@ import java.util.Random;
 import Avaliadores.AvaliadorCusto;
 import Avaliadores.AvaliadorFac;
 import Avaliadores.ExecutaMovimento;
-import BuscaLocalInstra.BuscaLocalIntra;
+import BuscaLocalIntra.BuscaLocalIntra;
 import Dados.Instancia;
 import Dados.Veiculo;
 import Metaheuristicas.Config;

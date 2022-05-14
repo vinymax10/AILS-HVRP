@@ -1,4 +1,4 @@
-package BuscaLocalInstra;
+package BuscaLocalIntra;
 
 import Avaliadores.AvaliadorCusto;
 import Avaliadores.ExecutaMovimento;

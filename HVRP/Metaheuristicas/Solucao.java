@@ -5,7 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Random;
 
-import BuscaLocalInstra.BuscaLocalIntra;
+import BuscaLocalIntra.BuscaLocalIntra;
 import Dados.Arquivo;
 import Dados.Instancia;
 import Dados.Instancias;

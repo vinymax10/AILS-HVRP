@@ -7,7 +7,7 @@ import java.util.Random;
 import AjusteOmega.AODist;
 import AjusteOmega.AjusteOmega;
 import BuscaLocal.BuscaLocal;
-import BuscaLocalInstra.BuscaLocalIntra;
+import BuscaLocalIntra.BuscaLocalIntra;
 import CriterioAceitacao.CA;
 import CriterioAceitacao.CALimiar;
 import Dados.Instancia;
