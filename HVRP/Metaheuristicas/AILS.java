@@ -257,12 +257,10 @@ public class AILS
 		return mFBL;
 	}
 
-
 	public double getGap()
 	{
 		return 100*(double)((double)melhorF-otimo)/otimo;
 	}
-	
 	
 	public double getGapMBLDinan()
 	{
@@ -296,16 +294,6 @@ public class AILS
 		analisaSolucao(PR,perturbacaoEscolhida.getTipoPerturbacao()+sufixo,solucao2);
 	}
 
-	public String printOmegas()
-	{
-		String str="";
-		for (int i = 0; i < perturbadores.length; i++) 
-		{
-			str+="\n"+configuradoresOmega.get(this.perturbadores[i].tipoPerturbacao+""+solucaoReferencia.NumRotas);
-		}
-		return str;
-	}
-	
 	public CA getCriterioAceitacao() {
 		return criterioAceitacao;
 	}
