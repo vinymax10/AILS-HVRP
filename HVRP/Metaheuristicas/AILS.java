@@ -19,7 +19,6 @@ import Pertubacao.PerturbacaoBuild;
 
 public class AILS 
 {
-	//----------Problema------------
 	Solucao solucao,solucaoReferencia;
 	Solucao melhorSolucao;
 
@@ -29,12 +28,9 @@ public class AILS
 	double MAX;
 	double otimo;
 	
-	//----------IGAS------------
 	Config config;
 	
-	//----------caculoLimiar------------
 	int numIterUpdate;
-	//----------Metricas------------
 	int iterador;
 	long inicio,inicioLastBestSol;
 	long ini;
@@ -66,8 +62,6 @@ public class AILS
 	BuscaLocalIntra buscaLocalIntra;
 	CA criterioAceitacao;
 	
-//	----------Mare------------
-//	---------Print----------
 	boolean print=true;
 	boolean factibilizou;
 
@@ -319,5 +313,4 @@ public class AILS
 	public Perturbacao[] getPerturbadores() {
 		return perturbadores;
 	}
-	
 }

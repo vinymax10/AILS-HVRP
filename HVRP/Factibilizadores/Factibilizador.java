@@ -1,7 +1,6 @@
 package Factibilizadores;
 
 import java.util.Arrays;
-import java.util.Random;
 
 import Avaliadores.AvaliadorCusto;
 import Avaliadores.AvaliadorFac;
@@ -16,11 +15,6 @@ import Metaheuristicas.Rota;
 import Metaheuristicas.Solucao;
 import Metaheuristicas.Variante;
 
-//Factibilizador Best8 simples. custo>=0 custo+1/ganho e custo<0 -> custo*ganho
-//Permite a troca de uma rota infactivel pela factibilizacao da outra.
-//Adiciona somente o melhor movimento para cada combina��o de duas rotas.
-//Dinamico.
-
 public class Factibilizador 
 {
 	private Rota rotas[];
@@ -31,32 +25,15 @@ public class Factibilizador
 
 	private int topMelhores=0;
 	private int NumRotas;
-	int numTrocas=0;
 	
-	boolean removeuRota;
-	double menorCusto;
-	int tipoMov;
-	Rota rotaI,rotaJ;
-	int posRotaI,posRotaJ;
-	No noRotaI,noRotaJ;
-
-	int iterador,iterador2;
 	double f=0;
 	
-	int numMovimentos=6;
-	private int ordemMetodo[];
-	
-	double custoIdaVolta,custoIdaIda,custoVoltaIda,custoVoltaVolta;
-	double custoIda,custoVolta;
 	No auxSai,auxEntra;
 	int ganho;
 	double custo;
 	double custoAvaliacao;
-	TipoBLFac tipoBLFac;
 	Rota rotaA,rotaB;
-	int aleListMelhoresCustos;
 	int pos;
-	Random rand=new Random();
 	TipoCustoFac tipoCustoFac;
 	
 	TipoCustoFac tipoCustoFacs[]={TipoCustoFac.C_C, TipoCustoFac.C_CDG, 
@@ -67,8 +44,6 @@ public class Factibilizador
 	ExecutaMovimento executaMovimento;
 	No solucao[];
 	int limiteAdj;
-	int qtnNegativos;
-	double antF;
 	BuscaLocalIntra buscaLocalIntra;
 	double epsilon;
 	Instancia instancia;
@@ -91,12 +66,6 @@ public class Factibilizador
 				matrixMelhoras[j][i]=matrixMelhoras[i][j];
 			}
 		}
-		
-		this.tipoBLFac=config.getTipoBLFac();
-		this.aleListMelhoresCustos=config.getAleListMelhoresCustos();
-		this.ordemMetodo=new int [numMovimentos];
-		for (int i = 0; i < ordemMetodo.length; i++) 
-			ordemMetodo[i]=i;
 		
 		this.tipoCustoFac=config.getTipoCustoFac();
 		this.limiteAdj=Math.min(config.getLimiteAdj(), instancia.getSize()-1);
@@ -134,7 +103,6 @@ public class Factibilizador
 
 	public void imprimirSolucao()
 	{
-//		System.out.println("f: "+f+ " NumRotas: "+NumRotas+" topInfac: "+topInfac);
 		for (int i = 0; i < NumRotas; i++) 
 		{
 			System.out.println(rotas[i].toString());
@@ -143,26 +111,15 @@ public class Factibilizador
 	
 	public boolean factibilizar(Solucao solucao)
 	{
-//		System.out.println("----------------INICIO------------------");
 		setSolucao(solucao);
-		numTrocas=0;
 		boolean factivel=false;
 		boolean aumentouQ=false;
 		Veiculo veiculo;
 		boolean naoConseguiFactibilizar=false;
 		
-//		tipoCustoFac=tipoCustoFacs[rand.nextInt(tipoCustoFacs.length)];
-		
-		if(tipoBLFac==TipoBLFac.SNN||tipoBLFac==TipoBLFac.SSN||tipoBLFac==TipoBLFac.SNS||tipoBLFac==TipoBLFac.SSS)
-			BuscaLocalIntra();
-		
-		iterador=0;
-		iterador2=0;
 		do
 		{
 			topMelhores=0;
-			iterador++;
-//			System.out.println("iterador: "+iterador);
 			for (int i = 0; i < NumRotas; i++) 
 				rotas[i].setDemandaAcumulada();
 			
@@ -177,9 +134,7 @@ public class Factibilizador
 
 			if(factivel())
 			{
-				if(tipoBLFac==TipoBLFac.NNS||tipoBLFac==TipoBLFac.NSS||tipoBLFac==TipoBLFac.SNS||tipoBLFac==TipoBLFac.SSS)
-					BuscaLocalIntra();
-				
+				BuscaLocalIntra();
 				factivel=true;
 			}
 			else
@@ -226,8 +181,6 @@ public class Factibilizador
 				}
 				
 			}
-//			System.out.println("NumRotas: "+NumRotas+
-//			" naoConseguiFactibilizar: "+naoConseguiFactibilizar+" factivel: "+factivel);
 		}
 		while(!factivel&&!naoConseguiFactibilizar);
 		
@@ -246,35 +199,13 @@ public class Factibilizador
 		{
 			Arrays.sort(melhoras,0,topMelhores);
 			
-			qtnNegativos=0;
-			for (int i = 0; i < topMelhores; i++) 
-			{
-				if(melhoras[i].custoAvaliacao<0)
-					qtnNegativos++;
-			}
-//			
-			if(qtnNegativos==0)
-				qtnNegativos=topMelhores;
-			
-			pos= rand.nextInt(Math.min(qtnNegativos,aleListMelhoresCustos));
-//			pos=rand.nextInt(qtnNegativos);
-			
-//			iterador2++;
-//			System.out.println("iterador: "+iterador+" iterador2: "+iterador2);
-//			System.out.println("------------------------------");
-//			for (int i = 0; i < topMelhores; i++) 
-//			{
-//				System.out.println(melhoras[i]);
-//			}
+			pos= 0;
 			rotaA=melhoras[pos].rotaA;
 			rotaB=melhoras[pos].rotaB;
 			f+=executaMovimento.aplicar(melhoras[pos]);
 			
-			if(tipoBLFac==TipoBLFac.NSN||tipoBLFac==TipoBLFac.NSS||tipoBLFac==TipoBLFac.SSN||tipoBLFac==TipoBLFac.SSS)
-			{
-				BuscaLocalIntra(rotaA);
-				BuscaLocalIntra(rotaB);
-			}
+			BuscaLocalIntra(rotaA);
+			BuscaLocalIntra(rotaB);
 			
 			rotaA.setDemandaAcumulada();
 			rotaB.setDemandaAcumulada();
@@ -299,7 +230,6 @@ public class Factibilizador
 	
 	public void varrerRotas(Rota rota)
 	{
-//		System.out.println("Varrendo rota: "+rota);
 		if(rota.getNumElements()>1)
 		{
 			procuraBestCross(rota); 
@@ -401,7 +331,6 @@ public class Factibilizador
 						calcCusto();
 						noMelhora=matrixMelhoras[auxSai.rota.nomeRota][auxEntra.rota.nomeRota];
 						
-//						System.out.println(noMelhora);
 						if(custoAvaliacao<noMelhora.custoAvaliacao)
 						{
 							if(!noMelhora.ativo)
@@ -562,14 +491,6 @@ public class Factibilizador
 			if(rotas[i].alterada)
 				f+=buscaLocalIntra.buscaLocalIntra(rotas[i], solucao);
 		}
-	}
-	
-	
-	public void buscaLocalIntra(Solucao solucao)
-	{
-		setSolucao(solucao);
-		BuscaLocalIntra();
-		passaResultado(solucao);
 	}
 	
 }

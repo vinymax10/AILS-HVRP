@@ -1,7 +1,6 @@
 package BuscaLocal;
 
 import java.util.Arrays;
-import java.util.Random;
 
 import Avaliadores.AvaliadorCusto;
 import Avaliadores.AvaliadorFac;
@@ -14,10 +13,6 @@ import Metaheuristicas.NoPosMel;
 import Metaheuristicas.Rota;
 import Metaheuristicas.Solucao;
 
-//Essa busca local registra todas as possiveis melhoras ao longo de uma passada. 
-//Depois atualiza cada uma e verifica se ainda pode e se o custo compensa.
-//Atualiza��o dinamica Best full
-
 public class BuscaLocal
 {
 	private Rota rotas[];
@@ -27,9 +22,7 @@ public class BuscaLocal
 	private int topMelhores=0;
 	private int NumRotas;
 	
-	boolean removeuRota;
 	int menorCusto;
-	int tipoMov;
 	Rota rotaI,rotaJ;
 	int posRotaI,posRotaJ;
 	No noRotaI,noRotaJ;
@@ -37,24 +30,17 @@ public class BuscaLocal
 	int iterador;
 	double f=0;
 	
-	int numMovimentosInter=6;
-
-	int custoIdaVolta,custoIdaIda,custoVoltaIda,custoVoltaVolta;
 	double custo;
-	int custoIda,custoVolta;
 	No auxRotaI,auxRotaJ;
 	boolean trocou=false,trocouGloboal=true;
 	double antF;
-	Random rand=new Random();
 	Rota rotaA,rotaB;
-	int aleListMelhoresCustos;
 	int pos;
 	AvaliadorCusto avaliadorCusto;
 	AvaliadorFac avaliadorFac;
 	ExecutaMovimento executaMovimento;
 	No solucao[];
 	int limiteAdj;
-	TipoBLIntraBL tipoBLIntraBL;
 	BuscaLocalIntra buscaLocalIntra;
 	double epsilon;
 
@@ -76,9 +62,7 @@ public class BuscaLocal
 			}
 		}
 		
-		this.aleListMelhoresCustos=config.getAleListMelhoresCustos();
 		this.limiteAdj=Math.min(config.getLimiteAdj(), instancia.getSize()-1);
-		this.tipoBLIntraBL=config.getTipoBLIntraBL();
 		this.buscaLocalIntra=buscaLocalIntra;
 		this.epsilon=config.getEpsilon();
 	}
@@ -102,7 +86,6 @@ public class BuscaLocal
 
 	public void imprimirSolucao()
 	{
-//		System.out.println("f: "+f+ " NumRotas: "+NumRotas+" topInfac: "+topInfac);
 		for (int i = 0; i < NumRotas; i++) 
 		{
 			System.out.println(rotas[i].toString());
@@ -132,9 +115,6 @@ public class BuscaLocal
 		if(topMelhores>0)
 			executa();
 		
-		if(tipoBLIntraBL==TipoBLIntraBL.NS||tipoBLIntraBL==TipoBLIntraBL.SS)
-			BuscaLocalIntra();
-		
 		passaResultado(solucao);
 		if(removerRotasVazias)
 			solucao.removeRotasVazias();
@@ -146,7 +126,7 @@ public class BuscaLocal
 	{
 		while(topMelhores>0)
 		{
-			pos= rand.nextInt(Math.min(topMelhores,aleListMelhoresCustos));
+			pos= 0;
 
 			Arrays.sort(melhoras,0,topMelhores);
 			rotaA=melhoras[pos].rotaA;
@@ -154,11 +134,8 @@ public class BuscaLocal
 			
 			f+=executaMovimento.aplicar(melhoras[pos]);
 			
-			if(tipoBLIntraBL==TipoBLIntraBL.SN||tipoBLIntraBL==TipoBLIntraBL.SS)
-			{
-				BuscaLocalIntra(rotaA);
-				BuscaLocalIntra(rotaB);
-			}
+			BuscaLocalIntra(rotaA);
+			BuscaLocalIntra(rotaB);
 			
 			rotaA.setDemandaAcumulada();
 			rotaB.setDemandaAcumulada();
@@ -377,19 +354,4 @@ public class BuscaLocal
 		f+=buscaLocalIntra.buscaLocalIntra(rota, solucao);
 	}
 	
-	private void BuscaLocalIntra()
-	{
-		for (int i = 0; i < NumRotas; i++)
-		{
-			if(rotas[i].alterada)
-				f+=buscaLocalIntra.buscaLocalIntra(rotas[i], solucao);
-		}
-	}
-	
-	public void buscaLocalIntra(Solucao solucao)
-	{
-		setSolucao(solucao);
-		BuscaLocalIntra();
-		passaResultado(solucao);
-	}
 }

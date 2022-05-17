@@ -50,9 +50,8 @@ public abstract class Perturbacao
 	Instancia instancia;
 	int limiteAdj;
 	Veiculo veiculoAuxVeiculo;
-	double probVaricaoRotas;
+	double alfa;
 	int indexA,indexB;
-	double probVaricaoQtnRotas;
 	int varicaoQtnRotas;
 	boolean variouTipoVeiculo;
 	
@@ -71,8 +70,7 @@ public abstract class Perturbacao
 		this.numIterUpdate=config.getNumIterUpdate();
 		this.limiteAdj=config.getLimiteAdj();
 		this.veiculoAuxVeiculo=new Veiculo();
-		this.probVaricaoRotas=config.getProbVaricaoRotas();
-		this.probVaricaoQtnRotas=config.getProbVaricaoRotas();
+		this.alfa=config.getAlfa();
 		this.varicaoQtnRotas=config.getVaricaoQtnRotas();
 	}
 
@@ -121,7 +119,7 @@ public abstract class Perturbacao
 
 //		variando quantidade rotas
 //		if(rand.nextDouble()<probVaricaoQtnRotas)
-		if(rand.nextDouble()<probVaricaoRotas)
+		if(rand.nextDouble()<alfa)
 		{
 			if(this.NumRotas>NumRotasMin&&this.NumRotas<NumRotasMax)
 			{
@@ -181,7 +179,7 @@ public abstract class Perturbacao
 	
 	private void variarTipoVeiculo(Solucao s)
 	{
-		if(rand.nextDouble()<probVaricaoRotas)
+		if(rand.nextDouble()<alfa)
 		{
 			variouTipoVeiculo=true;
 			for (int i = 0; i < varicaoQtnRotas; i++) 
