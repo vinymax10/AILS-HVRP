@@ -9,7 +9,7 @@ public class LeituraParametros
 	private String file="";
 	private boolean rounded=false;
 	private Variante variant=Variante.FSMD;
-	private double limit=Double.MAX_VALUE;;
+	private double limit=Double.MAX_VALUE;
 	private double best=0;
 	private Config config =new Config();
 	
