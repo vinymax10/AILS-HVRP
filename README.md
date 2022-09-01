@@ -1,6 +1,6 @@
 # AILS-HVRP: An adaptive iterated local search heuristic for the Heterogeneous Fleet Vehicle Routing Problem
 
-The Adaptive Iterated Local Search (AILS) is a meta-heuristic that has a very interesting diversity control. The adjustment occurs both in the degree of perturbation and in the acceptance criterion, allowing it to escape from local optima with greater ease. This algorithm is an adaptation of the AILS-PR [1] applied to the Heterogeneous Fleet Vehicle Routing Problem. Its implementation was done in JAVA.
+Adaptive Iterated Local Search (AILS) is an iterated local search-based meta-heuristic that embeds adaptive strategies to tune  diversity control parameters. These parameters are the perturbation degree and the acceptance criterion. They are key parameters to ensure that the method escapes from local optima and keeps an adequate level of exploitation and exploration of the method. This algorithm is an adaptation of the AILS-PR [1], but applied to the Heterogeneous Fleet Vehicle Routing Problem. Its implementation is in JAVA language.
 
 ## References
 
