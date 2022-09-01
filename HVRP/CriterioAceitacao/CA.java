@@ -16,9 +16,9 @@ public abstract class CA
 	
 	public CA(Config config)
 	{
-		this.numIterUpdate=config.getNumIterUpdate();
+		this.numIterUpdate=config.getGamma();
 		this.eta=config.getEta();
-		this.mFBL=new Media(config.getNumIterUpdate());
+		this.mFBL=new Media(config.getGamma());
 	}
 	
 	public boolean aceitaSolucao(Solucao solucao, double distanciaBLEdge) 

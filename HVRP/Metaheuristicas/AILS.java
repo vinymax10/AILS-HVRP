@@ -11,7 +11,6 @@ import BuscaLocalIntra.BuscaLocalIntra;
 import CriterioAceitacao.CA;
 import CriterioAceitacao.CALimiar;
 import Dados.Instancia;
-import Dados.Instancias;
 import Factibilizadores.Factibilizador;
 import Pertubacao.HeuristicaAdicao;
 import Pertubacao.Perturbacao;
@@ -66,7 +65,8 @@ public class AILS
 	boolean factibilizou;
 
 	double epsilon;
-	
+	private StoppingCriterion stoppingCriterion;
+
 	public AILS(Instancia instancia,Config config,double d,double MAX)
 	{
 		this.instancia=instancia;
@@ -77,8 +77,8 @@ public class AILS
 		this.solucao =new Solucao(instancia,config);
 		this.solucaoReferencia =new Solucao(instancia,config);
 		this.melhorSolucao =new Solucao(instancia,config);
-		
-		this.numIterUpdate=config.getNumIterUpdate();
+		this.stoppingCriterion=config.getStoppingCriterion();
+		this.numIterUpdate=config.getGamma();
 		this.config=config;
 		this.otimo=d;
 		this.MAX=MAX;
@@ -132,15 +132,10 @@ public class AILS
 		
 		melhorSolucao.clone(solucaoReferencia);
 		
-//		while(melhorF>otimo&&MAX>iterador)
-//		while((melhorF-otimo)>epsilon&&(MAX*instancia.getSize())>(System.currentTimeMillis()-inicioLastBestSol)/1000)
-//		while(melhorF>otimo&&MAX>(System.currentTimeMillis()-inicio)/1000)
-//		while((melhorF-otimo)>epsilon&&(MAX*instancia.getSize())>(System.currentTimeMillis()-inicio)/1000)
-		while(melhorF>otimo&&MAX>(iterador-iteradorMF))
+		while(!stoppingCriterion())
 		{
 			isMelhorSolucao=false;
 			iterador++;
-			
 			perturbacao();
 
 			buscaLocal();
@@ -148,11 +143,9 @@ public class AILS
 			update();
 			
 			criterioAceitacao(solucao);
-			
 		}
 		
 		tempoFinal=(double)(System.currentTimeMillis()-inicio)/1000;
-		
 	}
 	
 	private void perturbacao()
@@ -212,24 +205,35 @@ public class AILS
 				+" iteradorMF: "+iteradorMF
 				+" HeuAdd: "+perturbacaoEscolhida.heuristicaAdicaoEscolhida
 				);
-			
 		}
+	}
+	
+	private boolean stoppingCriterion()
+	{
+		switch(stoppingCriterion)
+		{
+			case Time: 	if(melhorF<=otimo||MAX<=(System.currentTimeMillis()-inicio)/1000)
+							return true;
+						break;
+						
+			case Iteration: if(melhorF<=otimo||MAX<=iterador)
+								return true;
+							break;
+							
+			case IterationWithoutImprovement: 	if(melhorF<=otimo||MAX<=(iterador-iteradorMF))
+													return true;
+												break;
+		}
+		return false;
 	}
 	
 	public static void main(String[] args) 
 	{
-		Instancias instancias=new Instancias();
+		LeituraParametros leitor=new LeituraParametros();
+		leitor.lerParametros(args);
 		
-		int pos=66;	
-
-		Config config =new Config();
-		Instancia instancia=new Instancia(
-		"Instancias//"+instancias.instancias[pos].nome+".txt",config,
-		instancias.instancias[pos].rounded,instancias.instancias[pos].variante);
-		
-		System.out.println(instancias.instancias[pos].nome
-		+" otimo: "+instancias.instancias[pos].bestSolution.getOtimo());
-		AILS igas=new AILS(instancia,config,instancias.instancias[pos].bestSolution.getOtimo(),20000);
+		Instancia instancia=new Instancia(leitor.getFile(),leitor.getConfig(),leitor.isRounded(),leitor.getVariant());
+		AILS igas=new AILS(instancia,leitor.getConfig(),leitor.getBest(),leitor.getTimeLimit());
 		igas.procurar();
 	}
 	

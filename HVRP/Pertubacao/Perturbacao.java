@@ -67,10 +67,10 @@ public abstract class Perturbacao
 		this.candidatos=new No[size];
 		this.ordem=new int[size];
 		this.configuradoresOmega=configuradoresOmega;
-		this.numIterUpdate=config.getNumIterUpdate();
-		this.limiteAdj=config.getLimiteAdj();
+		this.numIterUpdate=config.getGamma();
+		this.limiteAdj=config.getVarphi();
 		this.veiculoAuxVeiculo=new Veiculo();
-		this.alfa=config.getAlfa();
+		this.alfa=config.getAlpha();
 		this.varicaoQtnRotas=config.getVaricaoQtnRotas();
 	}
 

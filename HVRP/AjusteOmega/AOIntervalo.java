@@ -18,7 +18,7 @@ public class AOIntervalo implements AjusteOmega
 	{
 		this.omegaMin=config.getOmegaMin();
 		this.omegaMax=config.getOmegaMax();
-		this.omegaMedio=new Media(config.getNumIterUpdate());
+		this.omegaMedio=new Media(config.getGamma());
 		this.size=size;
 		this.omega = config.getOmegaFixo();
 		this.omega=Math.min(size-2, Math.max(omega, 1));

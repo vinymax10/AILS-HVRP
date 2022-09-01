@@ -16,14 +16,14 @@ public class AODist implements AjusteOmega
 	
 	public AODist(Config config, int size) 
 	{
-		this.omega = config.getDistM();
-		this.numIterUpdate = config.getNumIterUpdate();
+		this.omega = config.getDBeta();
+		this.numIterUpdate = config.getGamma();
 		this.omegaMin=1;
 		this.omegaMax=size-2;
-		this.omegaMedio=new Media(config.getNumIterUpdate());
-		this.distBLMedia=new Media(config.getNumIterUpdate());
+		this.omegaMedio=new Media(config.getGamma());
+		this.distBLMedia=new Media(config.getGamma());
 
-		this.distIdeal=config.getDistM();
+		this.distIdeal=config.getDBeta();
 	}
 	
 	public void ajusteOmega()

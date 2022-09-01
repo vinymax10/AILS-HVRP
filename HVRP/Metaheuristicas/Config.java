@@ -1,7 +1,6 @@
 package Metaheuristicas;
 
 import java.text.DecimalFormat;
-import java.util.Arrays;
 
 import Factibilizadores.TipoCustoFac;
 import Pertubacao.HeuristicaAdicao;
@@ -10,40 +9,38 @@ import Pertubacao.TipoPerturbacao;
 
 public class Config implements Cloneable
 {
-	DecimalFormat deci=new DecimalFormat("0.000");
-	double eta;
-	int distM;
+	private DecimalFormat deci=new DecimalFormat("0.000");
+	private double eta;
+	private int dBeta;
 	
-	int numIterUpdate;
-	TipoPerturbacao perturbacao[];
-	HeuristicaAdicao[]heuristicasAdicao;
+	private int gamma;
+	private TipoPerturbacao perturbacao[];
+	private HeuristicaAdicao[]heuristicasAdicao;
 	//--------------------PR-------------------
-	int limiteAdj;
-	TipoCustoFac tipoCustoFac;
-	int omegaFixo,omegaMin,omegaMax;
-	double epsilon;
-	double alfa;
-	int varicaoQtnRotas;
-	TipoGetVeiculo tipoGetVeiculo;
-
+	private int varphi;
+	private TipoCustoFac tipoCustoFac;
+	private int omegaFixo,omegaMin,omegaMax;
+	private double epsilon;
+	private double alpha;
+	private int varicaoQtnRotas;
+	private TipoGetVeiculo tipoGetVeiculo;
+	private StoppingCriterion stoppingCriterion;
+	
 	public Config() 
 	{
 //		----------------------------Main----------------------------
-		this.limiteAdj=20;
-		this.numIterUpdate=20;
-//		----------------------------Controle de diversidade----------------------------
-		this.distM=15;
+		this.eta=0.2; 
+		this.alpha=0.4;
+		this.varphi=20;
+		this.gamma=20;
+		this.dBeta=15;
+		
+//		----------------------------Outros----------------------------
+		this.stoppingCriterion=StoppingCriterion.Time;
+		
 		this.epsilon=0.01;
-
-		this.alfa=0.4;
 		this.varicaoQtnRotas=2;
 		this.tipoGetVeiculo=TipoGetVeiculo.ProbProporcional;
-		
-//		----------------------------Criterio aceitacao----------------------------
-		this.eta=0.2; 
-		
-//		----------------------------Perturbacao----------------------------
-		
 		this.perturbacao=new TipoPerturbacao[3];
 		this.perturbacao[0]=TipoPerturbacao.Pert23;
 		this.perturbacao[1]=TipoPerturbacao.Pert24;
@@ -52,14 +49,7 @@ public class Config implements Cloneable
 		this.heuristicasAdicao=new HeuristicaAdicao[2];
 		heuristicasAdicao[0]=HeuristicaAdicao.DISTANCIA;
 		heuristicasAdicao[1]=HeuristicaAdicao.BESTCUSTO;
-		
-//		----------------------------Fase2 AILS----------------------------
-		
-//		----------------------------FAC----------------------------
 		this.tipoCustoFac=TipoCustoFac.C_CDG;
-		
-		
-//		----------------------------Outros----------------------------
 		this.omegaFixo=22;
 		this.omegaMin=25;
 		this.omegaMax=30;
@@ -76,41 +66,21 @@ public class Config implements Cloneable
 		return null;
 	}
 	
-	//---------gets and sets-----------
 	
 	@Override
 	public String toString() 
 	{
-		return "Config "
-		+"\n----------------------------Main----------------------------"
-		+"\nnumIterUpdate: "+numIterUpdate
-		+"\neta: " + deci.format(eta)
-		+"\ndistM: "+distM
-		+"\nlimiteAdj: "+limiteAdj
-		+"\nepsilon: " + deci.format(epsilon)
-		+"\nvaricaoQtnRotas: "+varicaoQtnRotas
-
-		
-		+"\n----------------------------diversidade----------------------------"
-		+"\nomegaFixo: "+omegaFixo
-		+"\nprobVaricaoRotas: "+deci.format(alfa)
-		+"\ntipoGetVeiculo: "+tipoGetVeiculo
-		+"\nomegaMin: "+omegaMin
-		+"\nomegaMax: "+omegaMax
-		
-		
-		+"\n----------------------------PR----------------------------"
-		
-		+"\n----------------------------Heuristica----------------------------"
-		+"\nperturbacao: "+Arrays.toString(perturbacao)
-		+"\nheuristicasAdicao: "+Arrays.toString(heuristicasAdicao)
-		
-		
-		+"\n----------------------------FAC----------------------------"
-		+"\nTipoCustoFac: "+tipoCustoFac
-		
-		;  
+		return "Parameters: "
+		+"\nGamma: "+gamma
+		+"\nEta: " + deci.format(eta)
+		+"\nDBeta: "+dBeta
+		+"\nVarphi: "+varphi
+		+"\nalpha: "+deci.format(alpha)
+		+"\nstoppingCriterion: "+stoppingCriterion.tipo
+		+"\n";
 	}
+
+	//---------gets and sets-----------
 
 	public DecimalFormat getDeci() {
 		return deci;
@@ -128,12 +98,12 @@ public class Config implements Cloneable
 		this.eta = eta;
 	}
 
-	public int getDistM() {
-		return distM;
+	public int getDBeta() {
+		return dBeta;
 	}
 
-	public void setDistM(int distM) {
-		this.distM = distM;
+	public void setDBeta(int dBeta) {
+		this.dBeta = dBeta;
 	}
 
 	public TipoPerturbacao[] getPerturbacao() {
@@ -144,12 +114,12 @@ public class Config implements Cloneable
 		this.perturbacao = perturbacao;
 	}
 
-	public int getNumIterUpdate() {
-		return numIterUpdate;
+	public int getGamma() {
+		return gamma;
 	}
 
-	public void setNumIterUpdate(int numIterUpdate) {
-		this.numIterUpdate = numIterUpdate;
+	public void setGamma(int gamma) {
+		this.gamma = gamma;
 	}
 
 	public HeuristicaAdicao[] getHeuristicasAdicao() {
@@ -160,12 +130,12 @@ public class Config implements Cloneable
 		this.heuristicasAdicao = heuristicas;
 	}
 
-	public int getLimiteAdj() {
-		return limiteAdj;
+	public int getVarphi() {
+		return varphi;
 	}
 
-	public void setLimiteAdj(int limiteAdj) {
-		this.limiteAdj = limiteAdj;
+	public void setVarphi(int varphi) {
+		this.varphi = varphi;
 	}
 
 	public TipoCustoFac getTipoCustoFac() {
@@ -192,12 +162,12 @@ public class Config implements Cloneable
 		this.epsilon = epsilon;
 	}
 
-	public double getAlfa() {
-		return alfa;
+	public double getAlpha() {
+		return alpha;
 	}
 
-	public void setAlfa(double alfa) {
-		this.alfa = alfa;
+	public void setAlpha(double alpha) {
+		this.alpha = alpha;
 	}
 
 	public int getVaricaoQtnRotas() {
@@ -231,6 +201,13 @@ public class Config implements Cloneable
 	public void setOmegaMax(int omegaMax) {
 		this.omegaMax = omegaMax;
 	}
-	
+
+	public StoppingCriterion getStoppingCriterion() {
+		return stoppingCriterion;
+	}
+
+	public void setStoppingCriterion(StoppingCriterion stoppingCriterion) {
+		this.stoppingCriterion = stoppingCriterion;
+	}
 	
 }

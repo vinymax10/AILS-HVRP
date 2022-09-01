@@ -94,7 +94,7 @@ public class Instancia
 			}
 			
 			//calculando Distancias
-			int limiteAdj=Math.min(config.getLimiteAdj()*2, size-1);
+			int limiteAdj=Math.min(config.getVarphi()*2, size-1);
 			knn=new int[size][limiteAdj];
 			VizKnn=new NoKnn[size-1];
 			
