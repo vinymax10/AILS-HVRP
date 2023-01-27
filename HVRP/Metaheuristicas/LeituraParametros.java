@@ -29,7 +29,7 @@ public class LeituraParametros
 					case "-eta": config.setEta(getEta(args[i+1]));break;
 					case "-alpha": config.setAlpha(getAlpha(args[i+1]));break;
 					case "-varphi": config.setVarphi(getVarphi(args[i+1]));break;
-					case "-gamma": config.setGamma(getVarphi(args[i+1]));break;
+					case "-gamma": config.setGamma(getGamma(args[i+1]));break;
 					case "-dBeta": config.setDBeta(getDBeta(args[i+1]));break;
 					case "-stoppingCriterion": config.setStoppingCriterion(getStoppingCriterion(args[i+1]));break;
 				}
